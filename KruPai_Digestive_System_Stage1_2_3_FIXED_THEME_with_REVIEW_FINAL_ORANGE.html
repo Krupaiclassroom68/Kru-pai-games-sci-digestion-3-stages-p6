@@ -1,0 +1,1067 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Kru Pai Classroom • Digestive System Quest (Stage Select)</title>
+<style>
+:root{
+  --bg:#ffffff;
+  --ink:#111827;
+  --card:#ffffff;
+  --brand:#2563EB;     /* blue */
+  --accent:#F97316;    /* orange */
+  --accent2:#16A34A;   /* green */
+  --muted:#6B7280;
+  --ok:#16A34A;
+  --bad:#DC2626;
+  --soft:#F8FAFC;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.container{max-width:980px;margin:0 auto;padding:16px}
+.header-top{
+  background:linear-gradient(90deg,var(--brand),#60A5FA);
+  color:#fff;padding:14px 16px;border-bottom:4px solid #dbeafe;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+}
+.brand-left{font-weight:900;letter-spacing:.4px;font-size:20px}
+.pills{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{
+  display:inline-flex;gap:8px;align-items:center;
+  padding:8px 12px;border-radius:999px;
+  background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.25);
+  font-weight:800;color:#fff;
+  backdrop-filter: blur(6px);
+}
+.pill button{
+  border:none;border-radius:999px;
+  padding:6px 10px;font-weight:900;cursor:pointer;
+  background:rgba(255,255,255,.92);color:#111827;
+}
+.pill button.active{background:var(--accent);color:#fff}
+.mainhead{
+  margin:16px 0 10px 0;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap
+}
+.h1{font-size:22px;font-weight:1000;color:var(--accent)}
+.sub{color:var(--muted);font-weight:700;margin-top:4px}
+.badge{
+  display:none;
+  padding:8px 12px;border-radius:999px;
+  background:#eff6ff;border:2px solid #bfdbfe;
+  font-weight:900;color:#1d4ed8;
+  gap:8px;align-items:center;
+}
+.card{
+  background:var(--card);
+  border:2px solid #dbeafe;
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 10px 22px rgba(37,99,235,.08);
+}
+.row{display:grid;gap:14px}
+@media (min-width:900px){
+  .row{grid-template-columns: 1.1fr .9fr; align-items:start;}
+}
+.input{
+  width:100%;
+  padding:16px;
+  font-size:18px;
+  border-radius:14px;
+  border:2px solid #bfdbfe;
+  text-align:center;
+  font-weight:900;
+  outline:none;
+}
+.input:focus{border-color:var(--brand); box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+.note{color:var(--muted);font-size:14px;text-align:center}
+.btn{
+  padding:12px 18px;border:none;border-radius:999px;
+  font-weight:1000;font-size:16px;cursor:pointer;
+}
+.btn.primary{background:var(--brand);color:#fff}
+.btn.accent{background:var(--accent);color:#fff}
+.btn.secondary{background:#e2e8f0;color:#111827}
+.btn.ghost{background:#fff;border:2px solid #e5e7eb;color:#111827}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.stage-grid{display:grid;gap:12px}
+@media (min-width:700px){ .stage-grid{grid-template-columns:repeat(3,1fr);} }
+.stage{
+  border:2px solid #e5e7eb;border-radius:16px;padding:14px;background:var(--soft);
+}
+.stage h3{margin:0 0 6px 0;font-size:18px;font-weight:1000}
+.stage p{margin:0;color:var(--muted);font-weight:700;font-size:13px;line-height:1.35}
+.stage .tag{display:inline-flex;margin-top:10px;padding:6px 10px;border-radius:999px;font-weight:1000;font-size:12px}
+.tag.ready{background:#ecfdf5;color:#065f46;border:1px solid #bbf7d0}
+.tag.soon{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
+.progress{font-weight:1000;color:var(--brand);font-size:18px}
+.qbox{
+  border:2px solid #e5e7eb;border-radius:16px;padding:16px;background:#fff;
+}
+.question{
+  font-weight:1000;font-size:20px;line-height:1.45;margin:0 0 12px 0;
+}
+.choices{display:grid;gap:10px}
+.choice{
+  border:2px solid #e5e7eb;border-radius:14px;
+  padding:14px 16px;font-weight:900;font-size:17px;
+  background:#f8fafc;cursor:pointer;text-align:left;
+}
+.choice:hover{border-color:var(--brand)}
+.choice.selected{border-color:var(--accent);background:#fff7ed}
+.choice.correct{border-color:var(--ok);background:#ecfdf5}
+.choice.wrong{border-color:var(--bad);background:#fef2f2}
+.choice.locked{cursor:not-allowed;opacity:.8}
+.choice:disabled{cursor:not-allowed;opacity:.82}
+.jumper{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(44px,1fr));
+  gap:8px;margin-top:12px
+}
+.dot{
+  padding:10px;border-radius:14px;border:2px solid #e5e7eb;background:#fff;
+  font-weight:900;cursor:pointer;position:relative;
+}
+.dot.current{border-color:var(--accent)}
+.dot.done{background:#fff7ed}
+.dot.correct{background:#ecfdf5;border-color:var(--ok)}
+.dot.wrong{background:#fef2f2;border-color:var(--bad)}
+.dot.correct::after{
+  content:"✓😁";
+  position:absolute;right:-10px;top:-10px;font-size:13px;
+}
+.dot.wrong::after{
+  content:"✗😅";
+  position:absolute;right:-10px;top:-10px;font-size:13px;
+}
+.big-emoji{
+  position:fixed;top:42%;left:50%;
+  transform:translate(-50%,-50%) scale(.25);
+  font-size:5.2rem;z-index:9999;pointer-events:none;
+  animation:bigPop .9s ease-out forwards;
+  filter:drop-shadow(0 10px 16px rgba(0,0,0,.18));
+}
+@keyframes bigPop{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.25)}
+  40%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}
+  100%{opacity:0;transform:translate(-50%,-60%) scale(1)}
+}
+.result h2{margin:6px 0 0 0;font-size:26px;font-weight:1000;color:var(--brand)}
+.praise{font-size:20px;font-weight:1000;margin:8px 0 2px 0}
+.history{
+  margin-top:14px;border:2px dashed #cbd5e1;border-radius:16px;
+  padding:14px;background:#f8fafc;
+}
+.hist-table{width:100%;border-collapse:collapse;font-size:14px}
+.hist-table th,.hist-table td{padding:8px;border-bottom:1px solid #e5e7eb;text-align:left}
+.hist-table th{color:#374151;font-weight:1000}
+.footer{margin:18px 0 6px 0;color:var(--muted);font-size:12px;text-align:center}
+.small{font-size:12px;color:var(--muted);font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="header-top">
+  <div class="brand-left">Kru Pai Classroom</div>
+  <div class="pills">
+    <div class="pill" title="Language">
+      🌐
+      <button id="langTH" onclick="setLang('th')">TH</button>
+      <button id="langEN" onclick="setLang('en')">EN</button>
+    </div>
+    <div class="pill badge" id="playerBadge">👤 <span id="badgeLabel">ผู้เล่น</span>: <span id="playerBadgeName"></span></div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="mainhead">
+    <div>
+      <div class="h1" id="title">🧠 เกมพิชิตระบบย่อยอาหาร (3 ด่าน)</div>
+      <div class="sub" id="subtitle">เลือกด่านก่อนเล่น • ตอบแล้วรู้ทันที • มีประวัติการเล่น</div>
+    </div>
+    <div class="progress" id="progressText"></div>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="screenLogin" class="card">
+    <div class="row">
+      <div>
+        <h2 style="margin:0 0 6px 0;color:var(--brand);font-weight:1000" id="loginTitle">🎒 ลงชื่อเข้าเล่นเกม</h2>
+        <div class="note" id="loginHint">พิมพ์ชื่อเล่น แล้วกดเริ่มเล่นได้เลย</div>
+        <input id="playerNameInput" class="input" type="text" maxlength="24" autocomplete="off" placeholder="เช่น น้องพี / Emma / Aladin" />
+        <button class="btn primary" style="width:100%;font-size:18px" onclick="goStageSelect()">▶️ เริ่มเล่นเกม</button>
+        <div class="note" id="lastPlayHint" style="display:none;margin-top:8px"></div>
+      </div>
+      <div class="card" style="border-color:#fed7aa;background:#fff7ed">
+        <div style="font-weight:1000;color:#9a3412;margin-bottom:8px" id="howTitle">✨ วิธีเล่น</div>
+        <div class="small" id="howText">
+          1) ลงชื่อ → 2) เลือกด่าน → 3) ตอบทีละข้อ<br/>
+          ตอบถูก = 😁🎉 • ตอบผิด = 😅💦
+        </div>
+        <div style="margin-top:10px" class="small">
+          <span style="font-weight:1000" id="tipLabel">ทิป:</span> <span id="tipText">เล่นซ้ำได้ คะแนนจะถูกบันทึกไว้ในประวัติของชื่อนั้น</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE SELECT -->
+  <div id="screenStage" class="card" style="display:none">
+    <h2 style="margin:0 0 10px 0;color:var(--accent);font-weight:1000" id="stageTitle">🗺️ เลือกด่านที่อยากเล่น</h2>
+    <div class="stage-grid">
+      <div class="stage">
+        <h3 id="s1Title">🥪 ด่านที่ 1 • ผลลัพธ์ของการย่อยอาหาร</h3>
+        <p id="s1Desc">กินเข้าไป → ย่อย → ได้อะไร → ดูดซึมที่ไหน (30 ข้อ)</p>
+        <div class="tag ready" id="s1Tag">พร้อมเล่น</div>
+        <div class="controls">
+          <button class="btn accent" onclick="startStage(1)">▶️ <span id="play1">เล่นด่าน 1</span></button>
+        </div>
+      </div>
+
+      <div class="stage">
+        <h3 id="s2Title">🧪 ด่านที่ 2 • เอนไซม์ & pH</h3>
+        <p id="s2Desc">เอนไซม์ย่อยอาหาร • pH ที่เหมาะสม • แหล่งสร้างน้ำย่อย</p>
+        <div class="tag ready" id="s2Tag">พร้อมเล่น</div>
+        <div class="controls">
+          <button class="btn accent" onclick="startStage(2)">▶️ <span id="play2">เล่นด่าน 2</span></button>
+        </div>
+      </div>
+
+      <div class="stage">
+        <h3 id="s3Title">🫀 ด่านที่ 3 • โครงสร้างอวัยวะย่อยอาหาร</h3>
+        <p id="s3Desc">ต่อมน้ำลาย • กระเพาะ • ลำไส้เล็ก/ใหญ่ (ลึกขึ้น)</p>
+        <div class="tag ready" id="s3Tag">พร้อมเล่น</div>
+        <div class="controls">
+          <button class="btn accent" onclick="startStage(3)">▶️ <span id="play3">เล่นด่าน 3</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls" style="margin-top:14px">
+      <button class="btn ghost" onclick="backToLogin()">↩️ <span id="backLogin">กลับไปหน้าแรก</span></button>
+    </div>
+
+    <div class="history" id="stageHistoryBox" style="display:none">
+      <div style="font-weight:1000;margin-bottom:8px" id="histTitle">📒 ประวัติการเล่น (แยกตามด่าน)</div>
+      <div style="overflow:auto">
+        <table class="hist-table" id="stageHistoryTable"></table>
+      </div>
+      <div class="controls" style="margin-top:12px">
+        <button class="btn secondary" onclick="clearAllMyHistory()">🧹 <span id="clearHist">ล้างประวัติชื่อนี้ทั้งหมด</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div id="screenGame" class="card" style="display:none">
+    <div class="qbox">
+      <div class="question" id="question"></div>
+      <div class="choices" id="choices"></div>
+      <div class="controls">
+        <button class="btn secondary" onclick="prevQ()">← <span id="btnPrev">ย้อนกลับ</span></button>
+        <button class="btn primary" onclick="nextQ()"><span id="btnNext">ถัดไป</span> →</button>
+        <button class="btn accent" onclick="finish()">🏁 <span id="btnFinish">สรุปคะแนน</span></button>
+        <button class="btn ghost" onclick="exitToStages()">🗺️ <span id="btnExit">กลับไปเลือกด่าน</span></button>
+      </div>
+      <div class="jumper" id="jumper"></div>
+      <div class="small" id="lockNote" style="margin-top:10px">* ตอบผิดแล้ว “ล็อกข้อ” เพื่อกันกดมั่ว (แนว Kru Pai)</div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="screenResult" class="card result" style="display:none">
+    <div id="playerShow" style="font-size:22px;font-weight:1000;color:var(--accent);margin:0 0 6px 0"></div>
+    <div id="praiseText" class="praise"></div>
+    <h2 id="scoreBig"></h2>
+    <p id="summary" style="margin:6px 0 0 0;color:var(--muted);font-weight:900"></p>
+
+    <div class="history" id="historyBox" style="display:none">
+      <div style="font-weight:1000;margin-bottom:8px" id="hist2Title">📒 ประวัติการเล่น (ด่านนี้)</div>
+      <div style="overflow:auto">
+        <table class="hist-table" id="historyTable"></table>
+      </div>
+      <div class="controls" style="margin-top:12px">
+        <button class="btn secondary" onclick="clearMyStageHistory()">🧹 <span id="clearStage">ล้างประวัติด่านนี้</span></button>
+      </div>
+    </div>
+
+    <div class="controls" style="margin-top:14px">
+      <button class="btn primary" onclick="replayStage()">🔁 <span id="replay">เล่นด่านนี้อีกครั้ง</span></button>
+      <button class="btn ghost" onclick="exitToStages()">🗺️ <span id="backStages">กลับไปเลือกด่าน</span></button>
+    </div>
+  </div>
+
+  <div class="footer">© Kru Pai Classroom • Digestive System Quest • Stage Select • TH/EN</div>
+</div>
+
+<script>
+/* =======================
+   Language UI
+======================= */
+let LANG = localStorage.getItem("kru_lang_digestive") || "th";
+const UI = {
+  th: {
+    title: "🧠 เกมพิชิตระบบย่อยอาหาร (3 ด่าน)",
+    subtitle: "เลือกด่านก่อนเล่น • ตอบแล้วรู้ทันที • มีประวัติการเล่น",
+    badgeLabel:"ผู้เล่น",
+    loginTitle:"🎒 ลงชื่อเข้าเล่นเกม",
+    loginHint:"พิมพ์ชื่อเล่น แล้วกดเริ่มเล่นได้เลย",
+    howTitle:"✨ วิธีเล่น",
+    howText:"1) ลงชื่อ → 2) เลือกด่าน → 3) ตอบทีละข้อ<br/>ตอบถูก = 😁🎉 • ตอบผิด = 😅💦",
+    tipLabel:"ทิป:",
+    tipText:"เล่นซ้ำได้ คะแนนจะถูกบันทึกไว้ในประวัติของชื่อนั้น",
+    stageTitle:"🗺️ เลือกด่านที่อยากเล่น",
+    s1Title:"🥪 ด่านที่ 1 • ผลลัพธ์ของการย่อยอาหาร",
+    s1Desc:"กินเข้าไป → ย่อย → ได้อะไร → ดูดซึมที่ไหน (30 ข้อ)",
+    s2Title:"🧪 ด่านที่ 2 • เอนไซม์ & pH",
+    s2Desc:"เอนไซม์ย่อยอาหาร • pH ที่เหมาะสม • แหล่งสร้างน้ำย่อย",
+    s3Title:"🫀 ด่านที่ 3 • โครงสร้างอวัยวะย่อยอาหาร",
+    s3Desc:"ต่อมน้ำลาย • กระเพาะ • ลำไส้เล็ก/ใหญ่ (ลึกขึ้น)",
+    ready:"พร้อมเล่น",
+    soon:"กำลังเติมคำถาม",
+    play1:"เล่นด่าน 1",
+    play2:"เล่นด่าน 2",
+    play3:"เล่นด่าน 3",
+    backLogin:"กลับไปหน้าแรก",
+    histTitle:"📒 ประวัติการเล่น (แยกตามด่าน)",
+    clearHist:"ล้างประวัติชื่อนี้ทั้งหมด",
+    btnPrev:"ย้อนกลับ",
+    btnNext:"ถัดไป",
+    btnFinish:"สรุปคะแนน",
+    btnExit:"กลับไปเลือกด่าน",
+    lockNote:"* ตอบผิดแล้ว “ล็อกข้อ” เพื่อกันกดมั่ว (แนว Kru Pai)",
+    hist2Title:"📒 ประวัติการเล่น (ด่านนี้)",
+    clearStage:"ล้างประวัติด่านนี้",
+    replay:"เล่นด่านนี้อีกครั้ง",
+    backStages:"กลับไปเลือกด่าน",
+    qLabel:(i,t)=>`ข้อ ${i}/${t}`,
+    score:(s,t)=>`คุณได้ ${s}/${t} คะแนน`,
+    percent:(p)=>`คิดเป็น ${p}%`,
+    playerShow:(name,stage)=>`🏅 ผู้เล่น : ${name} • ด่านที่ ${stage}`,
+    stageName:(n)=> n===1? "ผลลัพธ์ของการย่อยอาหาร" : (n===2? "เอนไซม์ & pH" : "โครงสร้างอวัยวะ"),
+  },
+  en: {
+    title: "🧠 Digestive System Quest (3 Stages)",
+    subtitle: "Choose a stage • Instant feedback • Play history",
+    badgeLabel:"Player",
+    loginTitle:"🎒 Enter your name",
+    loginHint:"Type a nickname and press Start.",
+    howTitle:"✨ How to play",
+    howText:"1) Enter name → 2) Choose stage → 3) Answer one by one<br/>Correct = 😁🎉 • Wrong = 😅💦",
+    tipLabel:"Tip:",
+    tipText:"Replay anytime — your scores are saved under your name.",
+    stageTitle:"🗺️ Choose a stage",
+    s1Title:"🥪 Stage 1 • Digestion results",
+    s1Desc:"Eat → digest → what you get → where it’s absorbed (30 Qs)",
+    s2Title:"🧪 Stage 2 • Enzymes & pH",
+    s2Desc:"Digestive enzymes • optimal pH • where juices are made",
+    s3Title:"🫀 Stage 3 • Organ structure",
+    s3Desc:"Salivary glands • stomach • small/large intestine (deeper)",
+    ready:"Ready",
+    soon:"Coming soon",
+    play1:"Play Stage 1",
+    play2:"Play Stage 2",
+    play3:"Play Stage 3",
+    backLogin:"Back to home",
+    histTitle:"📒 Play history (by stage)",
+    clearHist:"Clear all history for this name",
+    btnPrev:"Back",
+    btnNext:"Next",
+    btnFinish:"Finish",
+    btnExit:"Back to stages",
+    lockNote:"* Wrong answers lock the question to prevent random tapping.",
+    hist2Title:"📒 Play history (this stage)",
+    clearStage:"Clear this stage history",
+    replay:"Replay this stage",
+    backStages:"Back to stages",
+    qLabel:(i,t)=>`Q ${i}/${t}`,
+    score:(s,t)=>`You scored ${s}/${t}`,
+    percent:(p)=>`${p}%`,
+    playerShow:(name,stage)=>`🏅 Player: ${name} • Stage ${stage}`,
+    stageName:(n)=> n===1? "Digestion results" : (n===2? "Enzymes & pH" : "Organ structure"),
+  }
+};
+function setLang(l){
+  LANG = l;
+  localStorage.setItem("kru_lang_digestive", LANG);
+  document.getElementById("langTH").classList.toggle("active", LANG==="th");
+  document.getElementById("langEN").classList.toggle("active", LANG==="en");
+  applyUI();
+  renderLastPlayHint();
+  if(state.screen==="game") render();
+  if(state.screen==="stage") renderStageHistory();
+}
+function applyUI(){
+  const t = UI[LANG];
+  document.getElementById("title").textContent = t.title;
+  document.getElementById("subtitle").textContent = t.subtitle;
+  document.getElementById("badgeLabel").textContent = t.badgeLabel;
+
+  document.getElementById("loginTitle").textContent = t.loginTitle;
+  document.getElementById("loginHint").textContent = t.loginHint;
+  document.getElementById("howTitle").textContent = t.howTitle;
+  document.getElementById("howText").innerHTML = t.howText;
+  document.getElementById("tipLabel").textContent = t.tipLabel;
+  document.getElementById("tipText").textContent = t.tipText;
+
+  document.getElementById("stageTitle").textContent = t.stageTitle;
+  document.getElementById("s1Title").textContent = t.s1Title;
+  document.getElementById("s1Desc").textContent = t.s1Desc;
+  document.getElementById("s2Title").textContent = t.s2Title;
+  document.getElementById("s2Desc").textContent = t.s2Desc;
+  document.getElementById("s3Title").textContent = t.s3Title;
+  document.getElementById("s3Desc").textContent = t.s3Desc;
+  document.getElementById("s1Tag").textContent = t.ready;
+  document.getElementById("s2Tag").textContent = t.ready;
+  document.getElementById("s3Tag").textContent = t.ready;
+  document.getElementById("play1").textContent = t.play1;
+  document.getElementById("play2").textContent = t.play2;
+  document.getElementById("play3").textContent = t.play3;
+  document.getElementById("backLogin").textContent = t.backLogin;
+  document.getElementById("histTitle").textContent = t.histTitle;
+  document.getElementById("clearHist").textContent = t.clearHist;
+
+  document.getElementById("btnPrev").textContent = t.btnPrev;
+  document.getElementById("btnNext").textContent = t.btnNext;
+  document.getElementById("btnFinish").textContent = t.btnFinish;
+  document.getElementById("btnExit").textContent = t.btnExit;
+  document.getElementById("lockNote").textContent = t.lockNote;
+
+  document.getElementById("hist2Title").textContent = t.hist2Title;
+  document.getElementById("clearStage").textContent = t.clearStage;
+  document.getElementById("replay").textContent = t.replay;
+  document.getElementById("backStages").textContent = t.backStages;
+}
+
+/* =======================
+   Tiny sounds (WebAudio)
+======================= */
+let audioCtx = null;
+function beep(freq=740, dur=0.06, gain=0.05){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type="sine";
+    o.frequency.value=freq;
+    g.gain.value=gain;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start();
+    o.stop(audioCtx.currentTime + dur);
+  }catch(e){}
+}
+function sClick(){beep(520,0.05,0.05)}
+function sOk(){beep(880,0.08,0.06)}
+function sBad(){beep(220,0.09,0.06)}
+
+/* =======================
+   Data: Stage 1 (30)
+======================= */
+const STAGE_DATA = {
+  1: [
+    {q_th:"การย่อยแป้งจนสมบูรณ์จะได้สารใด", q_en:"What is the final product of starch digestion?",
+     options_th:["ซูโครส","กลูโคส","แป้ง","ไกลโคเจน"], options_en:["Sucrose","Glucose","Starch","Glycogen"], a:1},
+    {q_th:"แป้งเริ่มถูกย่อยครั้งแรกที่อวัยวะใด", q_en:"Where does starch digestion begin?",
+     options_th:["กระเพาะอาหาร","ลำไส้เล็ก","ปาก","ลำไส้ใหญ่"], options_en:["Stomach","Small intestine","Mouth","Large intestine"], a:2},
+    {q_th:"เอนไซม์ใดเริ่มย่อยแป้งในปาก", q_en:"Which enzyme starts starch digestion in the mouth?",
+     options_th:["เพปซิน","อะไมเลส","ไลเปส","ทริปซิน"], options_en:["Pepsin","Amylase","Lipase","Trypsin"], a:1},
+    {q_th:"น้ำตาลโมเลกุลเดี่ยวที่ได้จากการย่อยแป้งมีอะไรบ้าง", q_en:"Which monosaccharides result from starch digestion?",
+     options_th:["กลูโคสเท่านั้น","ฟรักโทสเท่านั้น","กลูโคส ฟรักโทส กาแลกโทส","ซูโครส"], options_en:["Glucose only","Fructose only","Glucose, fructose, galactose","Sucrose"], a:2},
+    {q_th:"น้ำตาลโมเลกุลเดี่ยวถูกดูดซึมเข้าสู่เลือดที่ใด", q_en:"Where are monosaccharides absorbed into the blood?",
+     options_th:["กระเพาะอาหาร","ลำไส้เล็ก","ลำไส้ใหญ่","ปาก"], options_en:["Stomach","Small intestine","Large intestine","Mouth"], a:1},
+
+    {q_th:"โปรตีนเริ่มถูกย่อยครั้งแรกที่ใด", q_en:"Where does protein digestion begin?",
+     options_th:["ปาก","ลำไส้เล็ก","กระเพาะอาหาร","ลำไส้ใหญ่"], options_en:["Mouth","Small intestine","Stomach","Large intestine"], a:2},
+    {q_th:"เอนไซม์ใดทำหน้าที่ย่อยโปรตีนในกระเพาะอาหาร", q_en:"Which enzyme digests protein in the stomach?",
+     options_th:["อะไมเลส","ไลเปส","เพปซิน","ทริปซิน"], options_en:["Amylase","Lipase","Pepsin","Trypsin"], a:2},
+    {q_th:"โปรตีนย่อยจนสมบูรณ์จะได้สารใด", q_en:"What is the final product of protein digestion?",
+     options_th:["กรดไขมัน","กรดอะมิโน","กลูโคส","วิตามิน"], options_en:["Fatty acids","Amino acids","Glucose","Vitamins"], a:1},
+    {q_th:"การย่อยโปรตีนขั้นสุดท้ายเกิดขึ้นที่ใด", q_en:"Where does the final digestion of protein occur?",
+     options_th:["กระเพาะอาหาร","ลำไส้เล็ก","ลำไส้ใหญ่","ปาก"], options_en:["Stomach","Small intestine","Large intestine","Mouth"], a:1},
+    {q_th:"กรดอะมิโนถูกดูดซึมเข้าสู่ระบบใด", q_en:"Amino acids are absorbed into which system?",
+     options_th:["ระบบน้ำเหลือง","ระบบประสาท","ระบบเลือด","ระบบหายใจ"], options_en:["Lymphatic system","Nervous system","Blood system","Respiratory system"], a:2},
+
+    {q_th:"การย่อยไขมันต้องอาศัยสารใดช่วยก่อน", q_en:"Which substance helps emulsify fats before digestion?",
+     options_th:["เอนไซม์อะไมเลส","น้ำดี","กรดเกลือ","น้ำลาย"], options_en:["Amylase","Bile","HCl","Saliva"], a:1},
+    {q_th:"น้ำดีสร้างจากอวัยวะใด", q_en:"Which organ produces bile?",
+     options_th:["ตับ","ตับอ่อน","กระเพาะอาหาร","ลำไส้เล็ก"], options_en:["Liver","Pancreas","Stomach","Small intestine"], a:0},
+    {q_th:"ไขมันย่อยจนสมบูรณ์จะได้อะไร", q_en:"What are the final products of fat digestion?",
+     options_th:["กลูโคส","กรดอะมิโน","กรดไขมันและกลีเซอรอล","โปรตีน"], options_en:["Glucose","Amino acids","Fatty acids and glycerol","Protein"], a:2},
+    {q_th:"การย่อยไขมันส่วนใหญ่เกิดขึ้นที่ใด", q_en:"Where does most fat digestion occur?",
+     options_th:["ปาก","กระเพาะอาหาร","ลำไส้เล็ก","ลำไส้ใหญ่"], options_en:["Mouth","Stomach","Small intestine","Large intestine"], a:2},
+    {q_th:"ไขมันที่ย่อยแล้วถูกดูดซึมเข้าสู่ระบบใดเป็นหลัก", q_en:"Digested fats are mainly absorbed into which system?",
+     options_th:["ระบบเลือด","ระบบน้ำเหลือง","ระบบหายใจ","ระบบขับถ่าย"], options_en:["Blood","Lymphatic","Respiratory","Excretory"], a:1},
+
+    {q_th:"อวัยวะใดเป็นแหล่งดูดซึมสารอาหารมากที่สุด", q_en:"Which organ absorbs most nutrients?",
+     options_th:["กระเพาะอาหาร","ลำไส้ใหญ่","ลำไส้เล็ก","ตับ"], options_en:["Stomach","Large intestine","Small intestine","Liver"], a:2},
+    {q_th:"โครงสร้างใดช่วยเพิ่มพื้นที่ผิวในการดูดซึม", q_en:"Which structure increases surface area for absorption?",
+     options_th:["วิลไล","ต่อมน้ำลาย","ผนังกระเพาะ","เส้นเลือดแดง"], options_en:["Villi","Salivary glands","Stomach wall","Artery"], a:0},
+    {q_th:"วิตามินและเกลือแร่ส่วนใหญ่ดูดซึมที่ใด", q_en:"Where are vitamins and minerals mainly absorbed?",
+     options_th:["กระเพาะอาหาร","ลำไส้เล็ก","ลำไส้ใหญ่","ปาก"], options_en:["Stomach","Small intestine","Large intestine","Mouth"], a:1},
+    {q_th:"ลำไส้ใหญ่ดูดซึมสารใดเป็นหลัก", q_en:"What is mainly absorbed in the large intestine?",
+     options_th:["โปรตีน","ไขมัน","น้ำและเกลือแร่","กลูโคส"], options_en:["Protein","Fat","Water and minerals","Glucose"], a:2},
+    {q_th:"หากลำไส้เล็กทำงานผิดปกติ จะเกิดผลใด", q_en:"If the small intestine malfunctions, what may happen?",
+     options_th:["ย่อยอาหารเร็วขึ้น","ดูดซึมสารอาหารได้น้อยลง","น้ำดีไม่สร้าง","หยุดการหายใจ"], options_en:["Faster digestion","Less nutrient absorption","No bile production","Stops breathing"], a:1},
+
+    {q_th:"ข้อใดเรียงลำดับการย่อยแป้งได้ถูกต้อง", q_en:"Which is the correct sequence of starch digestion?",
+     options_th:["ปาก → กระเพาะ → ลำไส้เล็ก","กระเพาะ → ปาก → ลำไส้เล็ก","ลำไส้เล็ก → ปาก → กระเพาะ","ปาก → ลำไส้ใหญ่ → ลำไส้เล็ก"],
+     options_en:["Mouth → Stomach → Small intestine","Stomach → Mouth → Small intestine","Small intestine → Mouth → Stomach","Mouth → Large intestine → Small intestine"], a:0},
+    {q_th:"การย่อยอาหารหมายถึงอะไร", q_en:"What does digestion mean?",
+     options_th:["การดูดซึมสารอาหาร","การเปลี่ยนอาหารให้เป็นของเสีย","การเปลี่ยนอาหารให้เป็นสารโมเลกุลเล็กลง","การขับถ่าย"],
+     options_en:["Absorbing nutrients","Turning food into waste","Breaking food into smaller molecules","Excretion"], a:2},
+    {q_th:"สารอาหารชนิดใดไม่ต้องย่อยก่อนดูดซึม", q_en:"Which nutrient does not require digestion before absorption?",
+     options_th:["โปรตีน","แป้ง","ไขมัน","วิตามินและแร่ธาตุ"],
+     options_en:["Protein","Starch","Fat","Vitamins and minerals"], a:3},
+    {q_th:"ข้อใดกล่าวถูกต้องเกี่ยวกับการย่อยอาหาร", q_en:"Which statement about digestion is correct?",
+     options_th:["การย่อยเกิดเฉพาะในกระเพาะ","การย่อยทำให้สารอาหารดูดซึมได้ง่ายขึ้น","การย่อยไม่เกี่ยวกับเอนไซม์","การย่อยเกิดในลำไส้ใหญ่เท่านั้น"],
+     options_en:["Only in the stomach","Digestion helps nutrients be absorbed","Digestion doesn’t involve enzymes","Only in the large intestine"], a:1},
+    {q_th:"หากไม่มีเอนไซม์ จะเกิดผลใด", q_en:"What happens if digestive enzymes are absent?",
+     options_th:["การย่อยเร็วขึ้น","การย่อยหยุดชะงัก","ดูดซึมมากขึ้น","ไม่มีผลใด ๆ"],
+     options_en:["Digestion speeds up","Digestion is disrupted","More absorption","No effect"], a:1},
+
+    {q_th:"เหตุใดอาหารต้องถูกย่อยก่อนดูดซึม", q_en:"Why must food be digested before absorption?",
+     options_th:["เพื่อเพิ่มรสชาติ","เพื่อให้สารอาหารมีขนาดเล็กลง","เพื่อให้เคี้ยวง่าย","เพื่อกำจัดของเสีย"],
+     options_en:["To improve taste","To make molecules smaller","To chew easier","To remove waste"], a:1},
+    {q_th:"ถ้าไม่มีน้ำดี การย่อยใดจะผิดปกติมากที่สุด", q_en:"Without bile, which digestion is most affected?",
+     options_th:["แป้ง","โปรตีน","ไขมัน","วิตามิน"],
+     options_en:["Starch","Protein","Fat","Vitamins"], a:2},
+    {q_th:"การย่อยที่เกิดในปากจัดเป็นการย่อยแบบใด", q_en:"Digestion in the mouth is considered what type?",
+     options_th:["เชิงกลเท่านั้น","เชิงเคมีเท่านั้น","เชิงกลและเชิงเคมี","ไม่ใช่การย่อย"],
+     options_en:["Mechanical only","Chemical only","Both mechanical and chemical","Not digestion"], a:2},
+    {q_th:"ข้อใดเป็นผลเสียหากดูดซึมสารอาหารไม่ได้", q_en:"What is a consequence of poor nutrient absorption?",
+     options_th:["ร่างกายแข็งแรง","ภูมิคุ้มกันดี","ขาดสารอาหาร","พลังงานเพิ่ม"],
+     options_en:["Stronger body","Better immunity","Malnutrition","More energy"], a:2},
+    {q_th:"การย่อยอาหารที่สมบูรณ์ส่งผลอย่างไรต่อร่างกาย", q_en:"Complete digestion benefits the body by…",
+     options_th:["เพิ่มของเสีย","ทำให้ร่างกายได้รับสารอาหารครบถ้วน","ทำให้หิวเร็ว","ลดการดูดซึม"],
+     options_en:["Increasing waste","Providing full nutrients","Making you hungry faster","Reducing absorption"], a:1},
+  ],
+  2: [
+    {q_th:"เอนไซม์ใดเริ่มย่อยแป้ง", q_en:"Which enzyme starts starch digestion?",
+     options_th:["เพปซิน","ไลเปส","อะไมเลส","ทริปซิน"], options_en:["Pepsin","Lipase","Amylase","Trypsin"], a:2},
+
+    {q_th:"หากต่อมน้ำลายทำงานผิดปกติ การย่อยใดได้รับผลกระทบก่อน", q_en:"If salivary glands malfunction, which digestion is affected first?",
+     options_th:["โปรตีน","ไขมัน","แป้ง","วิตามิน"], options_en:["Protein","Fat","Starch","Vitamins"], a:2},
+
+    {q_th:"เพปซินทำงานได้ดีเพราะสภาพใด", q_en:"Why can pepsin work effectively?",
+     options_th:["เป็นกลาง","ด่าง","กรด","แห้ง"], options_en:["Neutral","Alkaline","Acidic","Dry"], a:2},
+
+    {q_th:"เอนไซม์ใดไม่ทำงานในกระเพาะอาหารเป็นหลัก", q_en:"Which enzyme does NOT mainly work in the stomach?",
+     options_th:["เพปซิน","อะไมเลส","กรดเกลือ (HCl)","เอนไซม์กระเพาะ"], options_en:["Pepsin","Amylase","HCl","Gastric enzyme"], a:1},
+
+    {q_th:"เอนไซม์ใดทำงานต่อจากเพปซินเพื่อย่อยโปรตีนให้ละเอียดขึ้น", q_en:"Which enzyme continues protein digestion after pepsin?",
+     options_th:["อะไมเลส","ทริปซิน","ไลเปส","มอลเทส"], options_en:["Amylase","Trypsin","Lipase","Maltase"], a:1},
+
+    {q_th:"กระเพาะอาหารมีสภาพเป็นกรดเพื่อเหตุผลใด", q_en:"Why is the stomach acidic?",
+     options_th:["เพื่อดูดซึมน้ำทันที","เพื่อกระตุ้น/ช่วยให้เพปซินทำงาน","เพื่อย่อยไขมันให้เร็ว","เพื่อทำให้อาหารหวานขึ้น"],
+     options_en:["To absorb water quickly","To activate/support pepsin","To speed up fat digestion","To make food sweeter"], a:1},
+
+    {q_th:"หากกระเพาะอาหารมีกรดน้อยมาก สิ่งใดกระทบชัดที่สุด", q_en:"If stomach acid is very low, what is most affected?",
+     options_th:["การย่อยแป้ง","การย่อยโปรตีน","การดูดซึมน้ำ","การดูดซึมเกลือแร่"], options_en:["Starch digestion","Protein digestion","Water absorption","Mineral absorption"], a:1},
+
+    {q_th:"เอนไซม์ในลำไส้เล็กส่วนใหญ่ทำงานได้ดีในสภาพใด", q_en:"Enzymes in the small intestine work best in which condition?",
+     options_th:["กรดจัด","เป็นกลาง","ด่างอ่อน","ไม่มีน้ำ"], options_en:["Strongly acidic","Neutral","Slightly alkaline","No water"], a:2},
+
+    {q_th:"ถ้า pH ในลำไส้เล็กเปลี่ยนเป็นกรดมากขึ้น ผลที่คาดได้คือข้อใด", q_en:"If the small intestine becomes more acidic, what is expected?",
+     options_th:["เอนไซม์ทำงานดีขึ้น","ประสิทธิภาพเอนไซม์ลดลง","ดูดซึมเพิ่มขึ้นทันที","ไม่มีผลใดๆ"], options_en:["Enzymes work better","Enzyme efficiency decreases","Absorption instantly increases","No effect"], a:1},
+
+    {q_th:"น้ำดีช่วยให้สภาพในลำไส้เล็กเป็นอย่างไร", q_en:"How does bile affect conditions in the small intestine?",
+     options_th:["ทำให้เป็นกรดมากขึ้น","ทำให้เป็นด่างอ่อน/ลดความเป็นกรด","ทำให้แห้ง","ทำให้เย็นลง"], options_en:["More acidic","Slightly alkaline / less acidic","Drier","Cooler"], a:1},
+
+    {q_th:"อวัยวะใด “สร้าง” น้ำดี", q_en:"Which organ produces bile?",
+     options_th:["ตับ","ถุงน้ำดี","ตับอ่อน","กระเพาะอาหาร"], options_en:["Liver","Gall bladder","Pancreas","Stomach"], a:0},
+
+    {q_th:"ถุงน้ำดีมีหน้าที่หลักใด", q_en:"What is the main function of the gall bladder?",
+     options_th:["สร้างน้ำดี","เก็บและปล่อยน้ำดี","สร้างเอนไซม์ย่อยโปรตีน","ดูดซึมน้ำตาล"], options_en:["Produce bile","Store and release bile","Produce protein enzymes","Absorb sugars"], a:1},
+
+    {q_th:"ตับอ่อนสำคัญต่อการย่อยอาหารเพราะข้อใด", q_en:"Why is the pancreas important for digestion?",
+     options_th:["สร้างน้ำดี","สร้างเอนไซม์หลายชนิดเพื่อย่อยสารอาหาร","ดูดซึมสารอาหารแทนลำไส้","ทำให้กระเพาะเป็นกรด"],
+     options_en:["Produces bile","Produces many enzymes to digest nutrients","Absorbs nutrients instead of intestines","Makes stomach acidic"], a:1},
+
+    {q_th:"ข้อใด “ไม่ใช่เอนไซม์” ย่อยอาหาร", q_en:"Which is NOT a digestive enzyme?",
+     options_th:["อะไมเลส","เพปซิน","น้ำดี","ทริปซิน"], options_en:["Amylase","Pepsin","Bile","Trypsin"], a:2},
+
+    {q_th:"การย่อยเชิงกลต่างจากการย่อยเชิงเคมีอย่างไร", q_en:"How does mechanical digestion differ from chemical digestion?",
+     options_th:["เชิงกลใช้เอนไซม์","เชิงกลทำให้อาหารแตกเป็นชิ้นเล็กลงทางกายภาพ","เชิงเคมีเกิดแค่ในปาก","เชิงเคมีไม่เกี่ยวกับโมเลกุล"],
+     options_en:["Mechanical uses enzymes","Mechanical breaks food physically into smaller pieces","Chemical happens only in mouth","Chemical doesn’t involve molecules"], a:1},
+
+    {q_th:"ข้อใดเป็นการย่อยเชิงเคมี", q_en:"Which is chemical digestion?",
+     options_th:["เคี้ยวอาหาร","การบีบตัวของหลอดอาหาร","เอนไซม์ทำลายโมเลกุลอาหาร","การคลุกเคล้าอาหารในกระเพาะ"],
+     options_en:["Chewing","Esophagus peristalsis","Enzymes breaking food molecules","Mixing in the stomach"], a:2},
+
+    {q_th:"การย่อยเชิงกลช่วยการย่อยเชิงเคมีได้อย่างไร", q_en:"How does mechanical digestion help chemical digestion?",
+     options_th:["ลดพื้นที่ผิว","เพิ่มพื้นที่ผิวให้น้ำย่อยทำงานได้มากขึ้น","ทำให้เอนไซม์หยุดทำงาน","ทำให้ pH เปลี่ยนเป็นกรด"],
+     options_en:["Reduces surface area","Increases surface area for enzymes","Stops enzymes","Makes pH acidic"], a:1},
+
+    {q_th:"ถ้าไม่มีการย่อยเชิงกล การย่อยเชิงเคมีจะเป็นอย่างไร", q_en:"Without mechanical digestion, chemical digestion will be…",
+     options_th:["เร็วขึ้น","มีประสิทธิภาพน้อยลง","ไม่เปลี่ยน","ทำงานเฉพาะในปาก"], options_en:["Faster","Less efficient","Unchanged","Only works in mouth"], a:1},
+
+    {q_th:"น้ำดีมีบทบาทสำคัญกับการย่อยไขมันเพราะข้อใด", q_en:"Bile is important for fat digestion because it…",
+     options_th:["ย่อยไขมันโดยตรงเหมือนเอนไซม์","ทำให้ไขมันแตกตัวเป็นหยดเล็กๆ เพิ่มพื้นที่ผิว","ทำให้กระเพาะเป็นด่าง","เปลี่ยนไขมันเป็นน้ำตาล"],
+     options_en:["Digests fat directly like an enzyme","Emulsifies fat into small droplets to increase surface area","Makes stomach alkaline","Turns fat into sugar"], a:1},
+
+    {q_th:"ข้อใดสรุปความสัมพันธ์ “เอนไซม์–pH–อวัยวะ” ได้ถูกต้องที่สุด", q_en:"Which best summarizes the enzyme–pH–organ relationship?",
+     options_th:["เอนไซม์ทำงานได้เหมือนกันทุกที่","เอนไซม์ทำงานได้ดีที่สุดใน pH และตำแหน่งที่เหมาะสม","pH ไม่เกี่ยวกับเอนไซม์","อวัยวะไม่สำคัญต่อการย่อย"],
+     options_en:["Enzymes work the same everywhere","Enzymes work best in the right pH and location","pH doesn’t affect enzymes","Organs don’t matter"], a:1},
+  ],
+  3: [
+    {q_th:"ฟันมีบทบาทสำคัญต่อการย่อยอาหารเพราะเหตุใด", q_en:"Why are teeth important for digestion?",
+     options_th:["สร้างเอนไซม์", "ดูดซึมสารอาหาร", "ทำให้อาหารแตกเป็นชิ้นเล็ก เพิ่มพื้นที่ผิว", "เปลี่ยนอาหารเป็นกรด"],
+     options_en:["Produce enzymes", "Absorb nutrients", "Break food into smaller pieces to increase surface area", "Turn food acidic"], a:2},
+    {q_th:"ต่อมน้ำลายมีหน้าที่สำคัญข้อใด", q_en:"What is the main function of salivary glands?",
+     options_th:["ดูดซึมอาหาร", "สร้างเอนไซม์อะไมเลส", "ย่อยโปรตีน", "สร้างน้ำดี"],
+     options_en:["Absorb food", "Produce amylase enzyme", "Digest protein", "Produce bile"], a:1},
+    {q_th:"ข้อใดไม่ใช่องค์ประกอบของน้ำลาย", q_en:"Which is NOT a component of saliva?",
+     options_th:["น้ำ", "อะไมเลส", "เมือก", "เพปซิน"],
+     options_en:["Water", "Amylase", "Mucus", "Pepsin"], a:3},
+    {q_th:"หากต่อมน้ำลายหลั่งน้ำลายน้อย จะส่งผลใดก่อน", q_en:"If saliva secretion is low, what is affected first?",
+     options_th:["การดูดซึมไขมัน", "การย่อยโปรตีน", "การย่อยแป้งในปาก", "การดูดซึมน้ำ"],
+     options_en:["Fat absorption", "Protein digestion", "Starch digestion in the mouth", "Water absorption"], a:2},
+    {q_th:"ผนังกระเพาะอาหารหนาและแข็งแรงเพราะเหตุใด", q_en:"Why is the stomach wall thick and strong?",
+     options_th:["เพื่อดูดซึมสารอาหาร", "เพื่อทนต่อการบีบตัวและกรด", "เพื่อสร้างน้ำดี", "เพื่อเพิ่มพื้นที่ผิว"],
+     options_en:["To absorb nutrients", "To withstand churning and acid", "To produce bile", "To increase surface area"], a:1},
+    {q_th:"สารใดช่วยป้องกันผนังกระเพาะไม่ให้ถูกย่อย", q_en:"Which substance protects the stomach lining?",
+     options_th:["กรดเกลือ", "เพปซิน", "เมือก", "น้ำดี"],
+     options_en:["HCl", "Pepsin", "Mucus", "Bile"], a:2},
+    {q_th:"กระเพาะอาหารเหมาะกับการย่อยอาหารชนิดใดมากที่สุด", q_en:"The stomach is best suited for digesting which nutrient?",
+     options_th:["แป้ง", "โปรตีน", "ไขมัน", "วิตามิน"],
+     options_en:["Starch", "Protein", "Fat", "Vitamins"], a:1},
+    {q_th:"หากกระเพาะอาหารไม่มีเมือกป้องกัน จะเกิดผลใด", q_en:"If the stomach lacks mucus protection, what may occur?",
+     options_th:["ดูดซึมเร็วขึ้น", "เกิดแผลในกระเพาะอาหาร", "การย่อยแป้งดีขึ้น", "ไม่มีผลใด"],
+     options_en:["Faster absorption", "Stomach ulcer", "Better starch digestion", "No effect"], a:1},
+    {q_th:"เหตุใดลำไส้เล็กจึงยาวมาก", q_en:"Why is the small intestine very long?",
+     options_th:["เพื่อเก็บอาหาร", "เพื่อเพิ่มพื้นที่ย่อยและดูดซึม", "เพื่อขับถ่าย", "เพื่อสร้างน้ำดี"],
+     options_en:["To store food", "To increase digestion and absorption area", "For excretion", "To produce bile"], a:1},
+    {q_th:"วิลไล (villi) มีหน้าที่สำคัญข้อใด", q_en:"What is the main function of villi?",
+     options_th:["ย่อยอาหาร", "เพิ่มพื้นที่ผิวในการดูดซึม", "สร้างน้ำดี", "เก็บของเสีย"],
+     options_en:["Digest food", "Increase surface area for absorption", "Produce bile", "Store waste"], a:1},
+    {q_th:"ข้อใดกล่าวถูกต้องเกี่ยวกับโครงสร้างลำไส้เล็ก", q_en:"Which statement about the small intestine is correct?",
+     options_th:["ผนังเรียบ ไม่มีรอยพับ", "มีวิลไลและเส้นเลือดมาก", "มีกรดสูง", "ไม่มีเอนไซม์"],
+     options_en:["Smooth wall without folds", "Has villi and many blood vessels", "Highly acidic", "Has no enzymes"], a:1},
+    {q_th:"หากวิลไลถูกทำลาย จะส่งผลใด", q_en:"If villi are damaged, what happens?",
+     options_th:["การย่อยเร็วขึ้น", "การดูดซึมลดลง", "การสร้างเอนไซม์เพิ่ม", "การขับถ่ายดีขึ้น"],
+     options_en:["Digestion becomes faster", "Absorption decreases", "Enzyme production increases", "Excretion improves"], a:1},
+    {q_th:"หน้าที่หลักของลำไส้ใหญ่คืออะไร", q_en:"What is the main function of the large intestine?",
+     options_th:["ย่อยอาหาร", "ดูดซึมโปรตีน", "ดูดซึมน้ำและเกลือแร่", "สร้างเอนไซม์"],
+     options_en:["Digest food", "Absorb protein", "Absorb water and minerals", "Produce enzymes"], a:2},
+    {q_th:"หากลำไส้ใหญ่ดูดซึมน้ำได้น้อย จะเกิดผลใด", q_en:"If the large intestine absorbs less water, what happens?",
+     options_th:["ท้องผูก", "ท้องเสีย", "อ้วน", "ดูดซึมเพิ่ม"],
+     options_en:["Constipation", "Diarrhea", "Obesity", "More absorption"], a:1},
+    {q_th:"ข้อใดเป็นลักษณะของกากอาหารในลำไส้ใหญ่", q_en:"Which describes waste in the large intestine?",
+     options_th:["มีสารอาหารมาก", "มีเอนไซม์จำนวนมาก", "เหลือสารอาหารน้อยมาก", "ยังย่อยต่อได้"],
+     options_en:["Contains many nutrients", "Contains many enzymes", "Very little nutrients remain", "Can be further digested"], a:2},
+    {q_th:"อวัยวะใดโครงสร้างเหมาะกับการดูดซึมมากที่สุด", q_en:"Which organ is best structured for absorption?",
+     options_th:["กระเพาะอาหาร", "ลำไส้เล็ก", "ลำไส้ใหญ่", "ปาก"],
+     options_en:["Stomach", "Small intestine", "Large intestine", "Mouth"], a:1},
+    {q_th:"เหตุใดกระเพาะอาหารจึงไม่ดูดซึมสารอาหารมาก", q_en:"Why does the stomach absorb little nutrients?",
+     options_th:["ไม่มีเอนไซม์", "ไม่มีวิลไลและมีกรดสูง", "อาหารอยู่ไม่นาน", "มีเมือกมาก"],
+     options_en:["No enzymes", "No villi and highly acidic", "Food stays briefly", "Too much mucus"], a:1},
+    {q_th:"ข้อใดแสดงความสัมพันธ์โครงสร้าง-หน้าที่ได้ถูกต้อง", q_en:"Which best shows a correct structure–function relationship?",
+     options_th:["ลำไส้ใหญ่ยาว → ดูดซึมโปรตีน", "กระเพาะเป็นกรด → ย่อยแป้ง", "ลำไส้เล็กมีวิลไล → ดูดซึมดี", "ปากเป็นด่าง → ย่อยไขมัน"],
+     options_en:["Large intestine long → absorbs protein", "Stomach acidic → digests starch", "Small intestine has villi → absorbs well", "Mouth alkaline → digests fat"], a:2},
+    {q_th:"หากอาหารไม่ถูกบดให้ละเอียด จะกระทบอวัยวะใดมากที่สุด", q_en:"If food is not well chewed, which organ is most affected?",
+     options_th:["ปาก", "กระเพาะอาหาร", "ลำไส้ใหญ่", "ทวารหนัก"],
+     options_en:["Mouth", "Stomach", "Large intestine", "Anus"], a:1},
+    {q_th:"ข้อใดสรุประบบย่อยอาหารได้ถูกต้องที่สุด", q_en:"Which best summarizes the digestive system?",
+     options_th:["ทุกอวัยวะทำหน้าที่เหมือนกัน", "โครงสร้างของอวัยวะแต่ละส่วนเหมาะกับหน้าที่เฉพาะของมัน", "การย่อยเกิดเฉพาะในกระเพาะ", "การดูดซึมเกิดทุกที่เท่ากัน"],
+     options_en:["All organs do the same job", "Each organ’s structure suits its specific function", "Digestion happens only in the stomach", "Absorption happens equally everywhere"], a:1}
+  ],
+
+};
+
+/* =======================
+   State & LocalStorage
+======================= */
+const state = {
+  screen: "login", // login | stage | game | result
+  playerName: "",
+  stage: 1,
+  idx: 0,
+  picked: [],
+  judged: [],
+  orderMaps: []
+};
+function keyAll(){ return "kruPai_digestive_history_v1"; } // {name:{stage1:[],stage2:[],stage3:[]}}
+function loadAllHistory(){
+  try{ return JSON.parse(localStorage.getItem(keyAll()) || "{}"); }
+  catch(e){ return {}; }
+}
+function saveAllHistory(obj){
+  localStorage.setItem(keyAll(), JSON.stringify(obj));
+}
+function ensureNameRecord(all, name){
+  if(!all[name]) all[name] = {stage1:[],stage2:[],stage3:[]};
+  if(!all[name].stage1) all[name].stage1=[];
+  if(!all[name].stage2) all[name].stage2=[];
+  if(!all[name].stage3) all[name].stage3=[];
+}
+function getStageArr(all, name, stage){
+  ensureNameRecord(all,name);
+  return stage===1? all[name].stage1 : stage===2? all[name].stage2 : all[name].stage3;
+}
+function addAttempt(name, stage, score, total){
+  const all = loadAllHistory();
+  ensureNameRecord(all,name);
+  const now = new Date();
+  const stamp = now.toLocaleString("th-TH",{hour12:false});
+  const arr = getStageArr(all,name,stage);
+  arr.unshift({t:stamp, score, total});
+  all[name][stage===1?"stage1":stage===2?"stage2":"stage3"] = arr.slice(0,20);
+  saveAllHistory(all);
+}
+function clearAllMyHistory(){
+  if(!state.playerName) return;
+  const all = loadAllHistory();
+  delete all[state.playerName];
+  saveAllHistory(all);
+  renderStageHistory();
+  renderLastPlayHint();
+}
+function clearMyStageHistory(){
+  if(!state.playerName) return;
+  const all = loadAllHistory();
+  ensureNameRecord(all,state.playerName);
+  all[state.playerName][state.stage===1?"stage1":state.stage===2?"stage2":"stage3"] = [];
+  saveAllHistory(all);
+  renderHistoryThisStage();
+}
+function praiseByScore(score,total){
+  const pct = Math.round(score*100/total);
+  if(pct>=90) return {text: LANG==="th" ? "🌟 สุดยอดมาก! เก่งขั้นเทพเลย!" : "🌟 Amazing! You’re a superstar!", tone:"var(--ok)"};
+  if(pct>=75) return {text: LANG==="th" ? "💙 เก่งมาก! อีกนิดเดียวจะสุดยอดแล้ว!" : "💙 Great job! You’re almost there!", tone:"var(--brand)"};
+  if(pct>=60) return {text: LANG==="th" ? "✨ เกือบผ่านแล้ว! ฝึกอีกนิดจะปังมาก!" : "✨ Nice! A bit more practice and you’ll shine!", tone:"var(--accent)"};
+  return {text: LANG==="th" ? "😊 สู้ๆ นะจ๊ะ ลองใหม่อีกครั้ง เดี๋ยวเก่งขึ้นแน่นอน!" : "😊 Keep going! Try again — you’ll improve!", tone:"var(--muted)"};
+}
+
+/* =======================
+   Navigation between screens
+======================= */
+function show(id){
+  document.getElementById("screenLogin").style.display = (id==="login") ? "block" : "none";
+  document.getElementById("screenStage").style.display = (id==="stage") ? "block" : "none";
+  document.getElementById("screenGame").style.display  = (id==="game")  ? "block" : "none";
+  document.getElementById("screenResult").style.display= (id==="result")? "block" : "none";
+  state.screen = id;
+  document.getElementById("progressText").textContent = "";
+}
+function backToLogin(){
+  sClick();
+  show("login");
+}
+function goStageSelect(){
+  sClick();
+  const input = document.getElementById("playerNameInput");
+  const name = (input.value||"").trim();
+  if(!name){
+    alert(LANG==="th" ? "กรุณาพิมพ์ชื่อก่อนเล่นนะจ๊ะ 😊" : "Please enter a name 😊");
+    input.focus(); return;
+  }
+  state.playerName = name;
+  document.getElementById("playerBadgeName").textContent = name;
+  document.getElementById("playerBadge").style.display = "inline-flex";
+  show("stage");
+  renderStageHistory();
+}
+function exitToStages(){
+  sClick();
+  show("stage");
+  renderStageHistory();
+}
+function startStage(n){
+  sClick();
+  state.stage = n;
+  resetStageState();
+  state.answers = [];
+show("game");
+  render();
+}
+function replayStage(){
+  sClick();
+  resetStageState();
+  show("game");
+  render();
+}
+
+/* =======================
+   Stage gameplay
+======================= */
+function resetStageState(){
+  state.idx = 0;
+  const DATA = STAGE_DATA[state.stage] || [];
+  state.picked = Array(DATA.length).fill(null);
+  state.judged = Array(DATA.length).fill(null);
+  state.orderMaps = Array(DATA.length).fill(null);
+}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}}
+function showBigEmoji(isCorrect){
+  const el = document.createElement("div");
+  el.className = "big-emoji";
+  el.textContent = isCorrect ? "😁🎉" : "😅💦";
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 950);
+}
+
+function render(){
+  const DATA = STAGE_DATA[state.stage] || [];
+  const t = UI[LANG];
+  if(!DATA.length){
+    document.getElementById("question").textContent = LANG==="th" ? "ด่านนี้กำลังเติมคำถาม" : "Coming soon";
+    document.getElementById("choices").innerHTML = "";
+    document.getElementById("jumper").innerHTML = "";
+    return;
+  }
+  const item = DATA[state.idx];
+  document.getElementById("progressText").textContent = t.qLabel(state.idx+1, DATA.length) + " • " + (LANG==="th" ? `ด่าน ${state.stage}` : `Stage ${state.stage}`);
+
+  document.getElementById("question").textContent = (LANG==="th") ? item.q_th : item.q_en;
+  const opts = (LANG==="th") ? item.options_th : item.options_en;
+
+  // build order map (shuffle once per question)
+  if(!state.orderMaps[state.idx]){
+    const base = opts.map((_,i)=>i);
+    shuffle(base);
+    state.orderMaps[state.idx] = base;
+  }
+  const order = state.orderMaps[state.idx];
+  const correctScreen = order.indexOf(item.a);
+
+  const choices = document.getElementById("choices");
+  choices.innerHTML = "";
+  for(let i=0;i<order.length;i++){
+    const optIndex = order[i];
+    const b = document.createElement("button");
+    b.className = "choice";
+    b.textContent = opts[optIndex];
+    if(state.picked[state.idx]===i) b.classList.add("selected");
+    if(state.judged[state.idx]===false){ b.disabled=true; 
+  try{ const DATA=STAGE_DATA[state.stage]||[]; const item=DATA[state.idx]; const order=state.orderMaps[state.idx]||[]; const chosenOpt=order[state.picked[state.idx]]; const correctOpt=item? item.a : 0; state.answers.push({idx: state.idx, chosen: chosenOpt, correct: correctOpt}); }catch(e){}
+b.classList.add("locked"); }
+    if(state.judged[state.idx]!==null){
+      if(i===correctScreen) b.classList.add("correct");
+      if(state.picked[state.idx]===i && i!==correctScreen) b.classList.add("wrong");
+    }
+    b.onclick = ()=>select(i);
+    choices.appendChild(b);
+  }
+
+  const jumper = document.getElementById("jumper");
+  jumper.innerHTML = "";
+  for(let k=0;k<DATA.length;k++){
+    const d = document.createElement("button");
+    d.className="dot";
+    d.textContent = (k+1);
+    if(k===state.idx) d.classList.add("current");
+    if(state.judged[k]===true) d.classList.add("correct");
+    else if(state.judged[k]===false) d.classList.add("wrong");
+    else if(state.picked[k]!==null) d.classList.add("done");
+    d.onclick = ()=>{ sClick(); state.idx=k; render(); };
+    jumper.appendChild(d);
+  }
+}
+
+function select(i){
+  // Lock if answered wrong before
+  if(state.judged[state.idx]===false) return;
+
+  sClick();
+  const DATA = STAGE_DATA[state.stage];
+  const item = DATA[state.idx];
+
+  const order = state.orderMaps[state.idx];
+  const correctScreen = order.indexOf(item.a);
+
+  state.picked[state.idx]=i;
+  const ok = (i===correctScreen);
+  state.judged[state.idx]=ok;
+
+  showBigEmoji(ok);
+  if(ok) sOk(); else sBad();
+  render();
+}
+function prevQ(){ sClick(); if(state.idx>0){state.idx--; render();}}
+function nextQ(){ sClick(); const DATA = STAGE_DATA[state.stage]; if(state.idx<DATA.length-1){state.idx++; render();}}
+
+function finish(){
+  sClick();
+  const DATA = STAGE_DATA[state.stage] || [];
+  let score = 0;
+  for(let i=0;i<DATA.length;i++) if(state.judged[i]===true) score++;
+  const pct = DATA.length ? Math.round(score*100/DATA.length) : 0;
+
+  // Save
+  if(state.playerName && DATA.length){
+    addAttempt(state.playerName, state.stage, score, DATA.length);
+  }
+
+  const praise = praiseByScore(score, DATA.length||1);
+  document.getElementById("playerShow").textContent = UI[LANG].playerShow(state.playerName || "-", state.stage);
+  const pt = document.getElementById("praiseText");
+  pt.textContent = praise.text;
+  pt.style.color = praise.tone;
+
+  document.getElementById("scoreBig").textContent = UI[LANG].score(score, DATA.length);
+  document.getElementById("summary").textContent = UI[LANG].percent(pct) + " • " + (LANG==="th" ? "หัวข้อ: " : "Topic: ") + UI[LANG].stageName(state.stage);
+
+  show("result");
+  renderHistoryThisStage();
+}
+
+/* =======================
+   History rendering
+======================= */
+function renderLastPlayHint(){
+  const hint = document.getElementById("lastPlayHint");
+  const name = (document.getElementById("playerNameInput").value||"").trim();
+  if(!name){ hint.style.display="none"; return; }
+  const all = loadAllHistory();
+  if(!all[name]){ hint.style.display="none"; return; }
+  const a1 = (all[name].stage1||[])[0];
+  if(a1){
+    hint.textContent = (LANG==="th")
+      ? `ล่าสุด (ด่าน 1): ${a1.score}/${a1.total} • เล่นมาแล้ว ${(all[name].stage1||[]).length} รอบ`
+      : `Last (Stage 1): ${a1.score}/${a1.total} • Attempts: ${(all[name].stage1||[]).length}`;
+    hint.style.display="block";
+  }else{
+    hint.style.display="none";
+  }
+}
+function renderStageHistory(){
+  const box = document.getElementById("stageHistoryBox");
+  const table = document.getElementById("stageHistoryTable");
+  if(!state.playerName){ box.style.display="none"; return; }
+
+  const all = loadAllHistory();
+  if(!all[state.playerName]){ box.style.display="none"; return; }
+  ensureNameRecord(all,state.playerName);
+
+  const s1 = all[state.playerName].stage1 || [];
+  const s2 = all[state.playerName].stage2 || [];
+  const s3 = all[state.playerName].stage3 || [];
+  const totalAttempts = s1.length + s2.length + s3.length;
+  if(!totalAttempts){ box.style.display="none"; return; }
+
+  box.style.display="block";
+  const t = UI[LANG];
+  const row = (arr, stageNo)=>{
+    if(!arr.length) return `<tr><td>${stageNo}</td><td>${t.stageName(stageNo)}</td><td>-</td><td>-</td><td>-</td></tr>`;
+    const best = arr.reduce((m,x)=> Math.max(m, Math.round(x.score*100/x.total)), 0);
+    const last = arr[0];
+    const lastPct = Math.round(last.score*100/last.total);
+    return `<tr>
+      <td><b>${stageNo}</b></td>
+      <td>${t.stageName(stageNo)}</td>
+      <td>${arr.length}</td>
+      <td><b>${last.score}/${last.total}</b> (${lastPct}%)</td>
+      <td>${best}%</td>
+    </tr>`;
+  };
+
+  table.innerHTML = `
+    <tr>
+      <th>${LANG==="th" ? "ด่าน" : "Stage"}</th>
+      <th>${LANG==="th" ? "หัวข้อ" : "Topic"}</th>
+      <th>${LANG==="th" ? "จำนวนรอบ" : "Attempts"}</th>
+      <th>${LANG==="th" ? "ล่าสุด" : "Last"}</th>
+      <th>${LANG==="th" ? "ดีที่สุด" : "Best"}</th>
+    </tr>
+    ${row(s1,1)}
+    ${row(s2,2)}
+    ${row(s3,3)}
+  `;
+}
+function renderHistoryThisStage(){
+  const box = document.getElementById("historyBox");
+  const table = document.getElementById("historyTable");
+  if(!state.playerName){ box.style.display="none"; return; }
+  const all = loadAllHistory();
+  if(!all[state.playerName]){ box.style.display="none"; return; }
+  ensureNameRecord(all,state.playerName);
+
+  const arr = getStageArr(all,state.playerName,state.stage) || [];
+  if(!arr.length){ box.style.display="none"; return; }
+
+  box.style.display="block";
+  table.innerHTML = `
+    <tr>
+      <th>${LANG==="th" ? "รอบ" : "No."}</th>
+      <th>${LANG==="th" ? "วันที่/เวลา" : "Date/Time"}</th>
+      <th>${LANG==="th" ? "คะแนน" : "Score"}</th>
+      <th>%</th>
+    </tr>
+  ` + arr.map((h,i)=>{
+    const pct = Math.round(h.score*100/h.total);
+    return `<tr>
+      <td>${i+1}</td>
+      <td>${h.t}</td>
+      <td><b>${h.score}/${h.total}</b></td>
+      <td>${pct}%</td>
+    </tr>`;
+  }).join("");
+}
+
+/* =======================
+   Init
+======================= */
+window.addEventListener("DOMContentLoaded", ()=>{
+  document.getElementById("playerNameInput").addEventListener("input", renderLastPlayHint);
+  document.getElementById("playerNameInput").addEventListener("keydown", (e)=>{ if(e.key==="Enter") goStageSelect(); });
+
+  applyUI();
+  setLang(LANG); // also updates buttons and re-applies UI
+  show("login");
+  renderLastPlayHint();
+});
+
+// ===== Review system (Answer Key) =====
+state.answers = []; // {idx, chosen, correct}
+function replayStage(){ sClick(); startStage(state.stage); }
+
+function showReview(){
+  show("review");
+  const t = UI[LANG];
+  document.getElementById("reviewTitle").textContent = t.reviewTitle;
+  document.getElementById("reviewSubtitle").textContent = t.reviewSubtitle;
+
+  const DATA = STAGE_DATA[state.stage] || [];
+  const list = document.getElementById("reviewList");
+  list.innerHTML = "";
+
+  (state.answers||[]).forEach((ans, i) => {
+    const item = DATA[ans.idx];
+    if(!item) return;
+    const qText = (LANG==="th") ? item.q_th : item.q_en;
+    const opts = (LANG==="th") ? item.options_th : item.options_en;
+    const your = opts[ans.chosen] ?? "-";
+    const corr = opts[ans.correct] ?? "-";
+    const ok = ans.chosen === ans.correct;
+
+    const box = document.createElement("div");
+    box.style.cssText = "padding:12px;border-radius:14px;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.06);margin-bottom:10px;border:2px solid " + (ok? "#b7f1c0":"#ffd0d0");
+    box.innerHTML = `
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div style="font-weight:900">Q${i+1}. ${qText}</div>
+        <div style="font-weight:900">${ok? "✅":"❌"}</div>
+      </div>
+      <div style="margin-top:8px" class="muted">${t.yourAnswer}: <b>${your}</b></div>
+      <div style="margin-top:4px" class="muted">${t.correctAnswer}: <b>${corr}</b></div>
+    `;
+    list.appendChild(box);
+  });
+}
+
+// i18n labels
+UI.th.reviewTitle = "📘 ทบทวนคำตอบ";
+UI.en.reviewTitle = "📘 Review Answers";
+UI.th.reviewSubtitle = "ดูข้อที่ตอบถูก/ผิด พร้อมเฉลยใต้แต่ละข้อ";
+UI.en.reviewSubtitle = "See right/wrong answers with the correct choices";
+UI.th.yourAnswer = "คำตอบของคุณ";
+UI.en.yourAnswer = "Your answer";
+UI.th.correctAnswer = "เฉลย";
+UI.en.correctAnswer = "Correct answer";
+
+</script>
+
+</body>
+</html>
